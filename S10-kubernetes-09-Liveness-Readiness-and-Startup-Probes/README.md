@@ -186,8 +186,6 @@ kubectl delete -f liveness-exec.yaml
 
 ### Define a TCP liveness probe 
 
-### Define a TCP liveness probe 
-
 - A third type of liveness probe uses a `TCP socket`. With this configuration, the kubelet will attempt to open a socket to your container on the specified port. If it can establish a connection, the container is considered healthy, if it can't it is considered a failure.
 
 - Create a `tcp-liveness.yaml` and input text below.
