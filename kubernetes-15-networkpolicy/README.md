@@ -55,7 +55,18 @@ kubectl get no
   - nginx deployment under nginx namespace
   - clarusdb deployment under clarusdb namespace
 
-- We want to connect `clarusdb` pod from `clarusshop` pod, but we can't connect from `nginx` pod. So, we test the networkpolicy object.
+- We want to connect to the `clarus db` pod from the `clarus shop` pod, but we don't want to connect from the `nginx` pod. So, we test the networkpolicy object.
+
+- For network policy, it requires calico. Install calico.
+
+```bash
+curl https://raw.githubusercontent.com/helm/helm/master/scripts/get-helm-3 | bash
+helm version
+helm repo add projectcalico https://docs.tigera.io/calico/charts
+kubectl create namespace tigera-operator
+helm install calico projectcalico/tigera-operator --version v3.25.1 --namespace tigera-operator
+watch kubectl get pods -n calico-system
+```
 
 - Create 3 namespace.
 
@@ -435,7 +446,7 @@ curl clarusdb-svc.clarusdb-ns
 exit
 ```
 
-- This time it isn't work. Because there must be a pod labeled with `role: frontend` under the namespace labled with `kubernetes.io/metadata.name: clarusshop-ns`. 
+- This time it doesn't work. Because there must be a pod labeled with `role: frontend` under the namespace labled with `kubernetes.io/metadata.name: clarusshop-ns`. 
 
 - Add `role: frontend` label to `spec.template.metadata.labels` field in the `clarusshop.yaml` file and try again. So, we can connect the `clarusdb` pod from `clarusshop` pod.
 
@@ -454,3 +465,5 @@ curl <ip of clarusdb pod>
 curl clarusdb-svc.clarusdb-ns
 exit
 ```
+
+- This time it works.
